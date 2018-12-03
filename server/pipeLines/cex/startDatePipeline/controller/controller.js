@@ -67,6 +67,7 @@ var  findStartDate = function (symbol1, symbol2, date1, date2, lastNull, lastDat
     date1Data: getData(dates[date1], symbol1, symbol2),
     date2Data: getData(dates[date2], symbol1, symbol2)
   }).then(function (dateData) {
+    console.log('dateData---------------',dateData)
     if(!dateData.date1Data && dateData.date2Data && (date2-date1 === 1) ) {
       return dates[date2];
     }
@@ -108,6 +109,8 @@ var  findStartDate = function (symbol1, symbol2, date1, date2, lastNull, lastDat
 module.exports = {
   currencyStartDateFinder: function () {
     var  prosessStartDate = function (dbData) {
+          console.log('---------currencyStartDateFinder------------------',dbData[0])
+
       if(dbData.length === 0){
         return;
       }
@@ -133,7 +136,7 @@ module.exports = {
       }
     }
     return currencyPair.getAllCurrencyPairs().then(function (dbData) {
-      console.log('dbData>>>>>>>>>>>>>>',dbData)
+      //console.log('dbData>>>>>>>>>>>>>>',dbData)
       if(!dbData){
         dbData = [];
       }

@@ -24,27 +24,5 @@ module.exports = {
         return false
       }
     })
-  },
-  ohlcvRequestor: function (date, symbol1, symbol2) {
-    let options = {
-      url: 'https://cex.io/api/ohlcv/hd/'+date+'/'+symbol1+'/'+symbol2,
-      method : 'GET',
-      body: {}
-    }
-    return services.http.commonHttp.httpGenertor(options).then(function (resData) {
-
-      if(resData.responseBody){
-        if(typeof resData.responseBody === 'string'){
-          if(resData.responseBody === 'null' || resData.responseBody === '[]'){
-            return {};
-          }
-          else{
-            parser.parser.parseOHLCV(resData.responseBody)
-          }
-        }
-      }else{
-        return {};
-      }
-    })
   }
 }

@@ -24,12 +24,8 @@ var insertToQueue = function(queueName, data) {
   })
 }
 
-var consumeFromQueue = function(queueName) {
-  
-}
 
 module.exports = {
   channel: createQueueChannel,
-  insertToQueue: insertToQueue,
-  consumeFromQueue: consumeFromQueue
+  insertToQueue: insertToQueue
 }

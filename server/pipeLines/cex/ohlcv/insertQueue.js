@@ -1,6 +1,7 @@
 const services = require('services'),
   currencyPairs = services.db.mongo.cex.currencyPair;
 
+
 const config = require('config'),
   ohlcv = config.cex.url+ config.cex.ohlcv.ext,
   queueName = config.cex.queueNames.cexohlcv;
@@ -52,6 +53,7 @@ let dateCreator = function () {
   return dates;
 }
 var createDate = function (dateObj) {
+  console.log('++++++++++++++dateObj+++',dateObj)
   let dateStr = '';
   let year = dateObj.getFullYear().toString();
   let month = dateObj.getMonth()+1;
@@ -65,16 +67,18 @@ var createDate = function (dateObj) {
 
 var processSingleCurrency = function (currency) {
   let d = new Date();
-  let yesterdayDate = new Date(d.getDate() - 1 );
+  let yesterdayDate = d.setDate(d.getDate() - 1 );
+  yesterdayDate = new Date(yesterdayDate)
   let yesterdayStr = createDate(yesterdayDate);
   let startDate = new Date(currency.startDate);
   let startDateStr = createDate(startDate);
-  let dates = createDate();
+  let dates = dateCreator();
   let yesterdayIndex = dates.indexOf(yesterdayStr);
   let startDateIndex = dates.indexOf(startDateStr);
   for (let i = startDateIndex; i <= yesterdayIndex; i++){
-    let dataToQueue = ohlcv+'/'+dates[i]+'/'+currencyPair.symbol1+'/'+currencyPair.symbol2;
-    rabbitMQ.inserToQueue(queueName, dataToQueue)
+    let dataToQueue = ohlcv+'/'+dates[i]+'/'+currency.symbol1+'/'+currency.symbol2;
+    console.log('dataToQueue:::::',dataToQueue)
+    rabbitMQ.insertToQueue(queueName, new Buffer(dataToQueue));
   }
 } 
 
@@ -83,16 +87,17 @@ var processCurrencies = function (currencies) {
     return;
   }
   let currency = currencies[0];
-  return processSingleCurrency(currency).then(function (singleCurrencyData) {
-    currencies.shift();
-    return processCurrencies(currencies);
-  }).catch(function (error) {
-    return processCurrencies(currencies);
-  })
+  return processSingleCurrency(currency)
+  // .then(function (singleCurrencyData) {
+  //   currencies.shift();
+  //   return processCurrencies(currencies);
+  // }).catch(function (error) {
+  //   return processCurrencies(currencies);
+  // })
 }
 module.exports = {
   createOhlcvQueue: function () {
-    currencyPair.getAllCurrencyPairs().then(function (currencies) {
+    currencyPairs.getAllCurrencyPairs().then(function (currencies) {
       return processCurrencies(currencies);    
     })
   }

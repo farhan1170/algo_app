@@ -3,7 +3,8 @@ let  cexCron= require('./cexCron');
 
 cexCron.currencyPairs();  
 cexCron.startDateFinder();
- 
+cexCron.ohlcvFiller();
+cexCron.ohlcvConsumer(); 
   
 
 
