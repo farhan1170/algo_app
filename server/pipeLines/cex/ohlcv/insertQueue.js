@@ -64,22 +64,46 @@ var createDate = function (dateObj) {
   return dateStr;
 }
 
+var insertAndSleep = function (dataToQueues) {
+
+  if(!dataToQueues.length){
+    return;
+  }
+  console.log('send ---------------------',dataToQueues[0])
+  var secs = 5;
+  let dataToQueue = dataToQueues[0];
+  return rabbitMQ.insertToQueue(queueName, new Buffer(dataToQueue))
+  .then(function (inserted) {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        resolve('ok')
+      },1000*secs)
+    })
+  }).then(function (argument) {
+    dataToQueues.shift();
+    return insertAndSleep(dataToQueues)
+  })
+} 
 
 var processSingleCurrency = function (currency) {
+  let startDate = currency.ohlcvArchiveDate ? currency.ohlcvArchiveDate : currency.startDate;
   let d = new Date();
   let yesterdayDate = d.setDate(d.getDate() - 1 );
-  yesterdayDate = new Date(yesterdayDate)
+  yesterdayDate = new Date(yesterdayDate);
   let yesterdayStr = createDate(yesterdayDate);
-  let startDate = new Date(currency.startDate);
+  startDate = new Date(startDate);
   let startDateStr = createDate(startDate);
   let dates = dateCreator();
   let yesterdayIndex = dates.indexOf(yesterdayStr);
   let startDateIndex = dates.indexOf(startDateStr);
+  //let dataToQueues = [];
   for (let i = startDateIndex; i <= yesterdayIndex; i++){
     let dataToQueue = ohlcv+'/'+dates[i]+'/'+currency.symbol1+'/'+currency.symbol2;
+    //dataToQueues.push(dataToQueue);
     console.log('dataToQueue:::::',dataToQueue)
-    rabbitMQ.insertToQueue(queueName, new Buffer(dataToQueue));
+    rabbitMQ.insertToQueue(queueName, new Buffer(dataToQueue))
   }
+  //return insertAndSleep(dataToQueues);
 } 
 
 var processCurrencies = function (currencies) {

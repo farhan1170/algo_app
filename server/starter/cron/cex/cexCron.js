@@ -45,7 +45,7 @@ module.exports = {
     )
   },
   ohlcvFiller: function () {
-    pipeLines.cex.ohlcv.insertQueue.createOhlcvQueue();
+    //pipeLines.cex.ohlcv.insertQueue.createOhlcvQueue();
     // startDateFinderCron = new CronJob('*/10 * * * * *', function () {
     //   console.log('----------ohlcvFiller----------');
     //   pipeLines.cex.ohlcv.insertQueue.createOhlcvQueue();

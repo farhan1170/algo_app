@@ -9,6 +9,7 @@ var createQueueChannel = ( function () {
     return conn.createChannel();
   }).then(function (ch) {
     let queueNames = config.cex.queues;
+    ch.prefetch(1);
     queueNames.forEach(function (queueName) {
       ch.assertQueue(queueName, {durable: false});
     })
