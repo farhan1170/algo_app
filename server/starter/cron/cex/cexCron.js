@@ -37,23 +37,28 @@ module.exports = {
     )
   },
   startDateFinder: function () {
-    pipeLines.cex.startDatePipeLine.controller.controller.currencyStartDateFinder();
-    // startDateFinderCron = new CronJob(' */2 * * * *', function () {
-    //   console.log('----------startDateFinder----------');
-    //   pipeLines.cex.startDatePipeLine.controller.controller.currencyStartDateFinder();
-    // }, null, true, 'America/Los_Angeles'
-    // )
+    //pipeLines.cex.startDatePipeLine.controller.controller.currencyStartDateFinder();
+    startDateFinderCron = new CronJob(' */2 * * * *', function () {
+      console.log('----------startDateFinder----------');
+      pipeLines.cex.startDatePipeLine.controller.controller.currencyStartDateFinder();
+    }, null, true, 'America/Los_Angeles'
+    )
   },
   ohlcvFiller: function () {
-    //pipeLines.cex.ohlcv.insertQueue.createOhlcvQueue();
-    // startDateFinderCron = new CronJob('*/10 * * * * *', function () {
-    //   console.log('----------ohlcvFiller----------');
-    //   pipeLines.cex.ohlcv.insertQueue.createOhlcvQueue();
-    // }, null, true, 'America/Los_Angeles'
-    // )
+    pipeLines.cex.ohlcv.insertQueue.createOhlcvQueue();
+    startDateFinderCron = new CronJob('*/30 * * * * *', function () {
+      console.log('----------ohlcvFiller----------');
+      pipeLines.cex.ohlcv.insertQueue.createOhlcvQueue();
+    }, null, true, 'America/Los_Angeles'
+    )
   },
   ohlcvConsumer: function () {
     pipeLines.cex.ohlcv.consumeQueue.ohlcvConsumer();
+    startDateFinderCron = new CronJob('*/30 * * * * *', function () {
+      console.log('----------ohlcvFiller----------');
+      pipeLines.cex.ohlcv.consumeQueue.ohlcvConsumer();
+    }, null, true, 'America/Los_Angeles'
+    )
   }
 
 }
