@@ -60,7 +60,7 @@ if(day.length === 1){
   day = '0'+day;
 }
 currentDate = currentDate+day;
-var currentDateIndex = dates.indexOf(currentDate) -1;
+var currentDateIndex = dates.indexOf(currentDate) -2;
 var  findStartDate = function (symbol1, symbol2, date1, date2, lastNull, lastData) {
   console.log(symbol1, symbol2, dates[date1], dates[date2], dates[lastNull], dates[lastData])
   return Promise.props({
@@ -126,7 +126,8 @@ module.exports = {
             symbol2: dbData[0].symbol2
           }
           let updateJSON = {
-            startDate: new Date(data.substring(0,4)+'-'+data.substring(4,6)+'-'+data.substring(6,8))
+            startDate: new Date(data.substring(0,4)+'-'+data.substring(4,6)+'-'+data.substring(6,8)),
+            ohlcvArchiveDate : new Date(data.substring(0,4)+'-'+data.substring(4,6)+'-'+data.substring(6,8))
           }
           return currencyPair.updateCurrencyPair(query, updateJSON)
         }).then(function (updatedata) {

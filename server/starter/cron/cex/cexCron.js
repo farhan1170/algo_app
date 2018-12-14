@@ -30,19 +30,19 @@ module.exports = {
   //     },null, true, 'America/Los_Angeles')
   // },
   currencyPairs: function () {
-    currencyPairsCron = new CronJob('*/10 * * * *', function () {
+    currencyPairsCron = new CronJob(' */1 * * * *', function () {
       console.log('----------currencyPairs-------');
       pipeLines.cex.currencyLimits.controller.currencyUpdater.currencyPairPipeLine();  
     }, null, true, 'America/Los_Angeles'
     )
   },
   startDateFinder: function () {
-    //pipeLines.cex.startDatePipeLine.controller.controller.currencyStartDateFinder();
-    startDateFinderCron = new CronJob(' */10 * * * *', function () {
-      console.log('----------startDateFinder----------');
-      pipeLines.cex.startDatePipeLine.controller.controller.currencyStartDateFinder();
-    }, null, true, 'America/Los_Angeles'
-    )
+    pipeLines.cex.startDatePipeLine.controller.controller.currencyStartDateFinder();
+    // startDateFinderCron = new CronJob(' */2 * * * *', function () {
+    //   console.log('----------startDateFinder----------');
+    //   pipeLines.cex.startDatePipeLine.controller.controller.currencyStartDateFinder();
+    // }, null, true, 'America/Los_Angeles'
+    // )
   },
   ohlcvFiller: function () {
     //pipeLines.cex.ohlcv.insertQueue.createOhlcvQueue();

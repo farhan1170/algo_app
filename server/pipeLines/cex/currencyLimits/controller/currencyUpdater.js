@@ -40,5 +40,15 @@ module.exports = {
     }).catch(function (error) {
       console.log(error,'***************error',error)
     })
+  },
+  addStartDate : function (symbol1, symbol2, timeStamp) {
+    let condition = {
+      symbol1: symbol1,
+      symbol2: symbol2
+    };
+    let updateJSON = {
+      ohlcvArchiveDate: timeStamp
+    }
+    return services.db.mongo.cex.currencyPair.updateCurrencyPair(condition, updateJSON)
   }
 }

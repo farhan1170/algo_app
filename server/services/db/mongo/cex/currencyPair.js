@@ -1,7 +1,6 @@
 const Promise = require('bluebird');
 const models = require('model'),
   currencyPairModel = models.cex.currencyList.currencyPair();
- 
 module.exports = {
   addCurrencyPair: function (currencyPairArray) {
       return new Promise(function (resolve, reject) {

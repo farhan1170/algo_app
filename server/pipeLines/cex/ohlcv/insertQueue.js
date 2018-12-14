@@ -69,7 +69,6 @@ var insertAndSleep = function (dataToQueues) {
   if(!dataToQueues.length){
     return;
   }
-  console.log('send ---------------------',dataToQueues[0])
   var secs = 5;
   let dataToQueue = dataToQueues[0];
   return rabbitMQ.insertToQueue(queueName, new Buffer(dataToQueue))
@@ -96,14 +95,11 @@ var processSingleCurrency = function (currency) {
   let dates = dateCreator();
   let yesterdayIndex = dates.indexOf(yesterdayStr);
   let startDateIndex = dates.indexOf(startDateStr);
-  //let dataToQueues = [];
   for (let i = startDateIndex; i <= yesterdayIndex; i++){
     let dataToQueue = ohlcv+'/'+dates[i]+'/'+currency.symbol1+'/'+currency.symbol2;
-    //dataToQueues.push(dataToQueue);
     console.log('dataToQueue:::::',dataToQueue)
     rabbitMQ.insertToQueue(queueName, new Buffer(dataToQueue))
   }
-  //return insertAndSleep(dataToQueues);
 } 
 
 var processCurrencies = function (currencies) {
@@ -111,13 +107,7 @@ var processCurrencies = function (currencies) {
     return;
   }
   let currency = currencies[0];
-  return processSingleCurrency(currency)
-  // .then(function (singleCurrencyData) {
-  //   currencies.shift();
-  //   return processCurrencies(currencies);
-  // }).catch(function (error) {
-  //   return processCurrencies(currencies);
-  // })
+  return processSingleCurrency(currency);
 }
 module.exports = {
   createOhlcvQueue: function () {
